@@ -1,0 +1,49 @@
+{
+    "sw-cms": {
+        "blocks": {
+            "text": {
+                "ninja-cms-button": {
+                    "label": "CMS Button"
+                }
+            }
+        },
+        "elements": {
+            "ninja-cms-button": {
+                "config": {
+                    "label": {
+                        "buttonText": "Insert the text for your button:",
+                        "buttonTextColor": "Choose your text color:",
+                        "buttonUrl": "Insert your URL:",
+                        "newTab": "Open in new tab?",
+                        "hAlignment": "Choose your horizontal alignment:",
+                        "buttonColor": "Button Color:",
+                        "border": "Border:",
+                        "borderColor": "Border Color:",
+                        "width": "Button Width:",
+                        "height": "Button Height:",
+                        "borderRadius": "Border Radius:"
+                    },
+                    "placeholder": {
+                        "buttonText": "Enter the text on your button here..",
+                        "buttonUrl": "Example: https://www.google.de/",
+                        "hAlignment": "center",
+                        "border": "If you don't want a border you can leave this field empty",
+                        "borderColor": "Border Color:",
+                        "width": "leave this empty for automatic width",
+                        "height": "leave this empty for automatic height",
+                        "borderRadius": "For example: 10px. This will round the edges of your button"
+                    },
+                    "helpText": {
+                        "buttonText":"This is the text that will be written on your button",
+                        "buttonTextColor": "You can set any color for the text on your button here",
+                        "buttonUrl": "Plase enter the URL you are linking right here. For external links use the full adress. For internal links you should enter /page/",
+                        "buttonColor": "This will be the background color of your button",
+                        "border": "This will give your button a border. You can choose how big this border will be in this setting. You don't have to set a border",
+                        "borderColor": "You can choose a border color here. Your border doesn't have to be the same color as your button.",
+                        "borderRadius": "Increase the border-radius to make your button round. If you don't want a round button leave me alone"
+                    }
+                }
+            }
+        }
+    }
+}

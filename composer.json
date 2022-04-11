@@ -1,0 +1,32 @@
+{
+    "name": "ninja/cms-button-example",
+    "description": "Ninja CMS Button",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "version": "v1.0.0",
+    "authors": [
+        {
+            "name": "Ninja Army (Joschi Mehta)"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "NINJA\\CmsButtonExample\\": "src/"
+        }
+    },
+    "require": {
+        "shopware/core": ">=6.3.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "NINJA\\CmsButtonExample\\CmsButtonExample",
+        "copyright": "(c) by Ninja Army",
+        "label": {
+            "de-DE": "CMS Button",
+            "en-GB": "CMS Button"
+        },
+        "description": {
+            "de-DE": "Dieses Plugin stellt ermöglicht es Ihnen Buttons in den Erlebniswelten nach Ihren Wünschen zu erstellen.",
+            "en-GB": "This plugin gives you the possibility to create buttons in the Shopping Experiences."
+        }
+    }
+}

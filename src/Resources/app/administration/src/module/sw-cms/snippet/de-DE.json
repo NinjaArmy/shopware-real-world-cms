@@ -1,0 +1,49 @@
+{
+    "sw-cms": {
+        "blocks": {
+            "text": {
+                "ninja-cms-button": {
+                    "label": "CMS Button"
+                }
+            }
+        },
+        "elements": {
+            "ninja-cms-button": {
+                "config": {
+                    "label": {
+                        "buttonText": "Wählen Sie Ihren Text:",
+                        "buttonTextColor": "Wählen Sie eine Textfarbe",
+                        "buttonUrl": "Geben Sie Ihre URL ein:",
+                        "newTab": "In neuem Tab öffnen",
+                        "hAlignment": "Horizontale Ausrichtung:",
+                        "buttonColor": "Button Farbe:",
+                        "border": "Rand:",
+                        "borderColor": "Rand Farbe:",
+                        "width": "Button Breite:",
+                        "height": "Button Höhe:",
+                        "borderRadius": "Border Radius:"
+                    },
+                    "placeholder": {
+                        "buttonText": "Dieser Text erscheint auf dem Button..",
+                        "buttonUrl": "Beispiel: https://www.google.de/",
+                        "hAlignment": "center",
+                        "border": "Wenn Sie kein Rand wünschen, können Sie dieses Feld leer lassen",
+                        "borderColor": "Rand Farbe:",
+                        "width": "Leer lassen für automatische Breite",
+                        "height": "Leer lassen für automatische Höhe",
+                        "borderRadius": "Beispiel: 10px. Wird die Ecken von dem Button abrunden"
+                    },
+                    "helpText": {
+                        "buttonText":"Das ist der Text, der auf dem Button stehen wird",
+                        "buttonTextColor": "Sie können jede beliebige Textfarbe hier wählen",
+                        "buttonUrl": "Bitte geben Sie die URL auf die Sie verlinken wollen hier ein. Für externe Links nutzen Sie bitte die volle Adresse. Für interne Links sollten Sie /page/ nutzen",
+                        "buttonColor": "Hier können Sie die Hintergrundfarbe des Buttons konfigurieren",
+                        "border": "Diese Einstellung gibt dem Button ein Rand. Sie können hier konfigurieren wie groß der Rand sein soll. Sie müssen keinen Rand setzen.",
+                        "borderColor": "Sie können hier die Randfarbe wählen. Der Rand muss nicht dieselbe Farbe haben wie der Button.",
+                        "borderRadius": "Erhöhen Sie den Border-Radius um Ihren Button rund zu machen. Falls Sie keinen runden Button wünschen können Sie dieses Feld leer lassen"
+                    }
+                }
+            }
+        }
+    }
+}
