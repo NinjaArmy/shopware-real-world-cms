@@ -278,4 +278,4 @@ Before we do that we quickly add a bit CSS to our storefront like this:
 As you already may see from the CSS code we want to configure how the button is placed and a bit more. To learn how you can to that please head over
 to <!-- INSERT CMS-Element Guide here -->
 
-You also can see the code for this guide here [shopware-real-world-cms-block](https://github.com/shopware/platform/blob/v6.3.4.1/src/Storefront/Resources/views/storefront/block/cms-block-image-text.html.twig) https://github.com/NinjaArmy/shopware-real-world-cms
+You also can see the code for this guide here [shopware-real-world-cms-block](https://github.com/NinjaArmy/shopware-real-world-cms) 
