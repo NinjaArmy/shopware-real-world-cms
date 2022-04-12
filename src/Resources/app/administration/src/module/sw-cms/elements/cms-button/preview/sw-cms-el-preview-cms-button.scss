@@ -1,0 +1,18 @@
+.ninja-button-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .ninja-btn {
+        background-color: #4492ed;
+        border: none;
+        color: #fff;
+        padding: 14px 50px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 30px 0;
+    }
+}

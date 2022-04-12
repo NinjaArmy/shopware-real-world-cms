@@ -1,0 +1,15 @@
+.sw-cms-el-ninja-cms-button {
+    display: flex;
+    width: 100%;
+    button {
+        outline: none;
+    }
+}
+
+.sw-el-ninja-btn {
+    padding: 1rem;
+
+    &:focus {
+        outline: none;
+    }
+}

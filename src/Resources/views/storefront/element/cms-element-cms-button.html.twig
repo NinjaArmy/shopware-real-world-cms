@@ -1,0 +1,13 @@
+{% block element_text %}
+	{%  set config = element.fieldConfig.elements %}
+
+	<div class="cms-element-{{ element.type }} ninja-cms-button-flex ninja-cms-button-flex{% if config.buttonAlign.value == "center" %}-center{% elseif config.buttonAlign.value == "flex-end" %}-end{% else %}-start{% endif %}">
+		{% block element_text_button %}
+			<a href="{{config.url.value}}" {% if config.newTab.value %} target="_blank" {% endif %}>
+				<button class="ninja-cms-btn" style="color: {{ config.textColor.value }}; background-color: {{ config.buttonColor.value }}; {% if config.buttonWidth.value != 0 %}width: {{config.buttonWidth.value}}px;{% else %}width: auto{% endif %}">
+                    {{ config.title.value }}
+                </button>
+			</a>
+		{% endblock %}
+	</div>
+{% endblock %}

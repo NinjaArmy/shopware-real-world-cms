@@ -1,0 +1,7 @@
+{% block sw_cms_element_ninja_cms_button %}
+	<div class="sw-cms-el-ninja-cms-button" v-model="element.config.buttonAlign.value" :style="buttonAlignStyle">
+		<a href="{{element.config.url.value}}" target="_blank" v-model="element.config.title.value" @input="onInputText">
+			<button class="sw-el-ninja-btn" :style="buttonStyles">{{element.config.title.value}}</button>
+		</a>
+	</div>
+{% endblock %}

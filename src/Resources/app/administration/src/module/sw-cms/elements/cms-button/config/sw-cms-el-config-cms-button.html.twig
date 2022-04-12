@@ -1,0 +1,55 @@
+{% block sw_cms_el_ninja_cms_button %}
+	<sw-tabs class="sw-cms-el-config-ninja-cms-button__tabs" defaultItem="content">
+
+		<template slot-scope="{ active }">
+			{% block sw_cms_el_config_ninja_button_tab_content %}
+				<sw-tabs-item :title="$tc('sw-cms.elements.general.config.tab.content')" name="content" :activetab="active">
+					{{ $tc('sw-cms.elements.general.config.tab.content') }}
+				</sw-tabs-item>
+			{% endblock %}
+			{% block sw_cms_el_ninja_button_config_tab_options %}
+				<sw-tabs-item :title="$tc('sw-cms.elements.general.config.tab.settings')" name="settings" :activetab="active">
+					{{ $tc('sw-cms.elements.general.config.tab.settings') }}
+				</sw-tabs-item>
+			{% endblock %}
+		</template>
+
+		<template slot="content" slot-scope="{ active }">
+			{% block sw_cms_el_ninja_cms_button_config_content %}
+				<sw-container v-if="active === 'content'" class="sw-cms-el-config-ninja-button__tab-content">
+					<sw-text-field :label="$tc('sw-cms.elements.ninja-cms-button.config.label.buttonText')" :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.buttonText')" v-model="element.config.title.value" @element-update="onElementUpdate" :helpText="$tc('sw-cms.elements.ninja-cms-button.config.helpText.buttonText')"></sw-text-field>
+					<sw-colorpicker v-model="element.config.textColor.value" :label="$tc('sw-cms.elements.ninja-cms-button.config.label.buttonTextColor')" coloroutput="hex" :zIndex="1001" :alpha="true" :helpText="$tc('sw-cms.elements.ninja-cms-button.config.helpText.buttonTextColor')"></sw-colorpicker>
+
+					<sw-field v-model="element.config.url.value" :label="$tc('sw-cms.elements.ninja-cms-button.config.label.buttonUrl')" :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.buttonUrl')" :helpText="$tc('sw-cms.elements.ninja-cms-button.config.helpText.buttonUrl')"></sw-field>
+					<sw-field v-model="element.config.newTab.value" type="switch" :label="$tc('sw-cms.elements.ninja-cms-button.config.label.newTab')"></sw-field>
+				</sw-container>
+			{% endblock %}
+
+			{% block sw_cms_el_ninja_button_config_settings %}
+				<sw-container v-if="active === 'settings'" class="sw-cms-el-config-ninja-button__tab-settings">
+					{% block sw_cms_el_cms_ninja_button_config_settings_horizontal_align %}
+						<sw-select-field :label="$tc('sw-cms.elements.ninja-cms-button.config.label.hAlignment')" v-model="element.config.buttonAlign.value" :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.hAlignment')">
+							<option value="flex-start">left</option>
+							<option value="center">center</option>
+							<option value="flex-end">right</option>
+						</sw-select-field>
+						<sw-colorpicker v-model="element.config.buttonColor.value" :label="$tc('sw-cms.elements.ninja-cms-button.config.label.buttonColor')" coloroutput="hex" :zIndex="1001" :alpha="true" :helpText="$tc('sw-cms.elements.ninja-cms-button.config.helpText.buttonColor')"></sw-colorpicker>
+						<sw-field v-model="element.config.buttonWidth.value"
+                                      type="number"
+                                      :label="$tc('sw-cms.elements.ninja-cms-button.config.label.width')"
+                                      :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.width')">
+                                <template #suffix>px</template>
+                        </sw-field>
+						<sw-field v-model="element.config.buttonHeight.value"
+                                      type="number"
+                                      :label="$tc('sw-cms.elements.ninja-cms-button.config.label.height')"
+                                      :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.height')">
+                                <template #suffix>px</template>
+                        </sw-field>
+						
+					{% endblock %}
+				</sw-container>
+			{% endblock %}
+		</template>
+	</sw-tabs>
+{% endblock %}
