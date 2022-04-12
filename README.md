@@ -5,38 +5,376 @@
 This repository exist to help you understand how CMS-Blocks and CMS-Elements work in the administration and in the backend. It's a full step by step guide on how
 to create a real world CMS Element which is a simple button. You can see the different steps by switching to different branches.
 
-### Creating a Shopware button CMS-Block
-
-This is the first part of the tutorial and we only create a CMS-Block for a button here. We create the component for the administration and build
-a small preview for the frontend.
-
-# Add a real world CMS block
+# Add a real world CMS element
 
 ## Overview
 
-This guide will teach you how to create a CMS-Block with your plugin. This guide will cover a real world example to keep everything easy we will just create a simple button. The CMS-block for the button we will cover right here.
+This guide is based on the [Add a real world CMS block](add-real-world-cms-block.md) guide. We will create a real world CMS-Element in this guide.
+That means we are creating an element with a config which fits to our CMS-Button block. 
 
 ## Prerequisites
 
-This plugin is built based on the [Add CMS block](../add-cms-block.md) guide. We assume that you know the basics for a CMS-Block from this guide.
+We assume that you know the basics for about creating a CMS-Element from [Creating a custom CMS element](../add-cms-element.md). So if you don't understand
+something please make sure to take a look at that guide as well.
 
-## Custom block in the administration
+## Creating your custom CMS element
 
-Let's get started with adding the custom block for a button in the administration. Since Shopware 6 already comes with different categories we just have to choose in which category we want to show our block. If you break down what a button is, you should come to the conclusion that a button is just text. So we create the block in the `text` category.
+Imagine you want to create a new element to display a button which is fully configurable by the shop manager. We already build a CMS-Block for the button in the 
+last guide but if you just have a block you don't have a configuration that's why you need a CMS-Element
 
-## Administration code
+## Administration Code
 
-Since you already know the basics from [Add CMS block](../add-cms-block.md), we will just look a quick look at the code.
-First we create our `main.js` in the  `<plugin root>/src/Resources/app/administration/src` directory.
+Since you already know the basics from [Add CMS Element](../add-cms-element.md), we will just look a quick look at the code.
+If you followed the real world block guide you already should have a `main.js` in the  `<plugin root>/src/Resources/app/administration/src` directory. 
+In this file we need to import our new element's directory. So let's do it:
 
 {% code title="<plugin root>/src/Resources/app/administration/src/main.js" %}
 ```javascript
+/* Import the block directory */
 import './module/sw-cms/blocks/text/cms-button';
+
+/* Import the elements directory */
+import './module/sw-cms/elements/cms-button'
 ```
 {% endcode %}
 
-### Block category
-We decided to create our block in the text category, so we place our first `index.js` in `<plugin root>/src/Resources/app/administration/src/module/sw-cms/blocks/text`
+Of course we need to create the directory which we just imported now. So let's do that and place an `index.js` in your `<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/cms-button/index.js`. We need to register our element here and we will keep it pretty simple:
+
+{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/dailymotion/index.js" %}
+```javascript
+import './component';
+import './config';
+import './preview';
+
+
+Shopware.Service('cmsService').registerCmsElement({
+    name: 'cms-button',
+    label: 'sw-cms.blocks.text.ninja-cms-button.label',
+    component: 'sw-cms-el-cms-button',
+    configComponent: 'sw-cms-el-config-cms-button',
+    previewComponent: 'sw-cms-el-preview-cms-button',
+    defaultConfig: {
+        title: {
+            source: 'static',
+            value: 'ButtonText'
+        },
+        textColor: {
+            source: 'static',
+            value: '#fff'
+        },
+        url: {
+            source: 'static',
+            value: ''
+        },
+        newTab: {
+            source: 'static',
+            value: 'true'
+        },
+        buttonAlign: {
+            source: 'static',
+            value: 'center'
+        },
+        buttonColor: {
+            source: 'static',
+            value: '#4492ed'
+        },
+        buttonWidth: {
+            source: 'static',
+            value: ''
+        },
+        buttonHeight: {
+            source: 'static',
+            value: ''
+        }
+    },
+
+});
+```
+{% endcode %}
+
+Of course you could add a bit more configuration but we want to keep it simple in this guide. Now we also need to create the component, preview and the config. Let's start by doing the component.
+
+### Element component
+
+In the component folder we have 3 different files. The index.js
+
+{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/cms-button/component/index.js" %}
+```javascript
+import template from './sw-cms-el-cms-button.html.twig';
+import './sw-cms-el-cms-button.scss';
+
+const { Component, Mixin } = Shopware;
+
+Component.register('sw-cms-el-cms-button', {
+    template,
+
+    inject: ['repositoryFactory'],
+
+    mixins: [
+        Mixin.getByName('cms-element')
+    ],
+
+    created() {
+        this.createdComponent();
+    },
+   
+    computed: {
+        buttonStyles() {
+            const styles = {};
+            if (this.element.config.textColor.value && this.element.config.buttonColor.value ) {
+                styles.color = `${this.element.config.textColor.value}`;
+                styles.backgroundColor = `${this.element.config.buttonColor.value}`;
+                
+            }
+            if (this.element.config.buttonWidth.value) {
+                styles.width = `${this.element.config.buttonWidth.value}px`;
+            } else {
+                styles.width = "auto";
+            }
+
+            if (this.element.config.buttonHeight.value) {
+                styles.height = `${this.element.config.buttonHeight.value}px`;
+            } else {
+                styles.height = "auto";
+            }
+
+            return styles;
+        },
+        buttonAlignStyle() {
+            const styles = {};
+            if (this.element.config.buttonAlign.value) {
+                styles.justifyContent = `${this.element.config.buttonAlign.value}`
+            }
+
+            return styles;
+        }
+    },
+
+    methods: {
+        createdComponent() {
+            this.initElementConfig('cms-button');
+            this.initElementData('cms-button');
+        },
+
+        onInputText(text) {
+            this.emitChanges(text);
+        },
+    }
+});
+```
+{% endcode %}
+
+We add computed properties which will handle the styling in that file as you can see. If you don't know how computed properties work take a look at  [computed property](https://vuejs.org/v2/guide/computed.html)
+
+The twig file for your element:
+
+{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/cms-button/component/sw-cms-el-cms-button.html.twig" %}
+{% raw %}
+```markup
+{% block sw_cms_element_ninja_cms_button %}
+	<div class="sw-cms-el-ninja-cms-button" v-model="element.config.buttonAlign.value" :style="buttonAlignStyle">
+		<a href="{{element.config.url.value}}" target="_blank" v-model="element.config.title.value" @input="onInputText">
+			<button class="sw-el-ninja-btn" :style="buttonStyles">{{element.config.title.value}}</button>
+		</a>
+	</div>
+{% endblock %}
+```
+{% endraw %}
+{% endcode %}
+
+And of course you also have a .scss file for your element in the component folder:
+
+{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/cms-button/component/sw-cms-el-cms-button.scss" %}
+```css
+.sw-cms-el-ninja-cms-button {
+    display: flex;
+    width: 100%;
+
+    button {
+        outline: none;
+    }
+
+}
+
+.sw-el-ninja-btn {
+    padding: 1rem;
+}
+
+.sw-el-ninja-btn:focus {
+    outline: none;
+}
+```
+{% endcode %}
+
+
+Let's move on with the preview component.
+
+### Element preview component
+
+The preview directory is not much different, we also have 3 files here. Let's start with the `index.js` again:
+
+{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/cms-button/preview/index.js" %}
+```javascript
+import template from './sw-cms-el-preview-cms-button.html.twig';
+import './sw-cms-el-preview-cms-button.scss';
+
+const { Component } = Shopware;
+
+Component.register('sw-cms-el-preview-cms-button', {
+    template
+});
+```
+{% endcode %}
+
+We registered the preview now we only have to do the template and some styles. So we create a new file `sw-cms-el-preview-cms-button.html.twig`.
+
+{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/cms-button/preview/sw-cms-el-preview-cms-button.html.twig" %}
+{% raw %}
+```markup
+{% block sw_cms_element_ninja_button_preview %}
+	<div class="ninja-button-preview">
+		<button class="ninja-btn">Button</button>
+	</div>
+{% endblock %}
+
+```
+{% endraw %}
+{% endcode %}
+
+We only display a simple button right here. Let's add some styles so people can actually take a look at it:
+
+{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/cms-button/preview/sw-cms-el-preview-cms-button.scss" %}
+```css
+.ninja-button-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .ninja-btn {
+        background-color: #4492ed;
+        border: none;
+        color: #fff;
+        padding: 14px 50px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 30px 0;
+    }
+}
+```
+{% endcode %}
+
+
+### Element config component
+
+The last thing you need for the CMS-Element in the administration is the config. And it's about the same here as well. We create a `config` directory and place 3 different files in here. Let's start with the `index.js`
+
+{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/cms-button/config/index.js" %}
+```javascript
+import template from './sw-cms-el-config-cms-button.html.twig';
+
+const { Component, Mixin } = Shopware;
+
+
+Component.register('sw-cms-el-config-cms-button', {
+    template,
+
+    inject: ['repositoryFactory'],
+
+    mixins: [
+        Mixin.getByName('cms-element')
+    ],
+
+    created() {
+        this.createdComponent();
+    },
+
+    methods: {
+        createdComponent() {
+            this.initElementConfig('cms-button');
+        },
+
+        onElementUpdate(element) {
+            this.$emit('element-update', element);
+        },
+        onInputText(title) {
+            this.emitChanges(title);
+        }
+    }
+
+});
+```
+{% endcode %}
+
+Let's create the twig file as well real quick so we have the option to actually configure the button:
+
+{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/elements/cms-button/config/sw-cms-el-config-cms-button.html.twig" %}
+{% raw %}
+```markup
+{% block sw_cms_el_ninja_cms_button %}
+	<sw-tabs class="sw-cms-el-config-ninja-cms-button__tabs" defaultItem="content">
+
+		<template slot-scope="{ active }">
+			{% block sw_cms_el_config_ninja_button_tab_content %}
+				<sw-tabs-item :title="$tc('sw-cms.elements.general.config.tab.content')" name="content" :activetab="active">
+					{{ $tc('sw-cms.elements.general.config.tab.content') }}
+				</sw-tabs-item>
+			{% endblock %}
+			{% block sw_cms_el_ninja_button_config_tab_options %}
+				<sw-tabs-item :title="$tc('sw-cms.elements.general.config.tab.settings')" name="settings" :activetab="active">
+					{{ $tc('sw-cms.elements.general.config.tab.settings') }}
+				</sw-tabs-item>
+			{% endblock %}
+		</template>
+
+		<template slot="content" slot-scope="{ active }">
+			{% block sw_cms_el_ninja_cms_button_config_content %}
+				<sw-container v-if="active === 'content'" class="sw-cms-el-config-ninja-button__tab-content">
+					<sw-text-field :label="$tc('sw-cms.elements.ninja-cms-button.config.label.buttonText')" :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.buttonText')" v-model="element.config.title.value" @element-update="onElementUpdate" :helpText="$tc('sw-cms.elements.ninja-cms-button.config.helpText.buttonText')"></sw-text-field>
+					<sw-colorpicker v-model="element.config.textColor.value" :label="$tc('sw-cms.elements.ninja-cms-button.config.label.buttonTextColor')" coloroutput="hex" :zIndex="1001" :alpha="true" :helpText="$tc('sw-cms.elements.ninja-cms-button.config.helpText.buttonTextColor')"></sw-colorpicker>
+
+					<sw-field v-model="element.config.url.value" :label="$tc('sw-cms.elements.ninja-cms-button.config.label.buttonUrl')" :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.buttonUrl')" :helpText="$tc('sw-cms.elements.ninja-cms-button.config.helpText.buttonUrl')"></sw-field>
+					<sw-field v-model="element.config.newTab.value" type="switch" :label="$tc('sw-cms.elements.ninja-cms-button.config.label.newTab')"></sw-field>
+				</sw-container>
+			{% endblock %}
+
+			{% block sw_cms_el_ninja_button_config_settings %}
+				<sw-container v-if="active === 'settings'" class="sw-cms-el-config-ninja-button__tab-settings">
+					{% block sw_cms_el_cms_ninja_button_config_settings_horizontal_align %}
+						<sw-select-field :label="$tc('sw-cms.elements.ninja-cms-button.config.label.hAlignment')" v-model="element.config.buttonAlign.value" :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.hAlignment')">
+							<option value="flex-start">left</option>
+							<option value="center">center</option>
+							<option value="flex-end">right</option>
+						</sw-select-field>
+						<sw-colorpicker v-model="element.config.buttonColor.value" :label="$tc('sw-cms.elements.ninja-cms-button.config.label.buttonColor')" coloroutput="hex" :zIndex="1001" :alpha="true" :helpText="$tc('sw-cms.elements.ninja-cms-button.config.helpText.buttonColor')"></sw-colorpicker>
+						<sw-field v-model="element.config.buttonWidth.value"
+                                      type="number"
+                                      :label="$tc('sw-cms.elements.ninja-cms-button.config.label.width')"
+                                      :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.width')">
+                                <template #suffix>px</template>
+                        </sw-field>
+						<sw-field v-model="element.config.buttonHeight.value"
+                                      type="number"
+                                      :label="$tc('sw-cms.elements.ninja-cms-button.config.label.height')"
+                                      :placeholder="$tc('sw-cms.elements.ninja-cms-button.config.placeholder.height')">
+                                <template #suffix>px</template>
+                        </sw-field>
+						
+					{% endblock %}
+				</sw-container>
+			{% endblock %}
+		</template>
+	</sw-tabs>
+{% endblock %}
+
+
+```
+{% endraw %}
+{% endcode %}
+
+Now we are pretty much done. We also could add a .scss file if we need to style the configuration but in this case it's not necessary. So we skip that. Before we see anything changing in the administration we still need to change one little line of code from our [Add a real world CMS block](add-real-world-cms-block.md) guide. Our code should like this:
 
 {% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/blocks/text/cms-button/index.js" %}
 ```javascript
@@ -56,109 +394,17 @@ Shopware.Service('cmsService').registerCmsBlock({
         marginRight: '20px',
         sizingMode: 'boxed'
     },
-    /* The slot config is important!
-       We give the slot button the element text in this tutorial because we haven't defined a button element yet.
-       You can use the existing blocks and elements out of the box but it gets interesting if you want to create your very own element with an own config.
-       We'll take a look at this later in this guide.
-    */
+    /* Changed this line of code */
     slots: {
-        button: 'text'
+        button: 'cms-button'
     }
 });
 ```
 {% endcode %}
 
+#### Build the administration
 
-### Block component
-
-Luckily we are just creating a simple button in this guide so the code will be very simple.
-
-{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/blocks/text/cms-button/component/sw-cms-block-button.html.twig" %}
-{% raw %}
-```text
-{% block sw_cms_block_button %}
-	<div class="sw-cms-block-button">
-		<slot name="button"></slot>
-	</div>
-{% endblock %}
-```
-{% endraw %}
-{% endcode %}
-
-We also need to register the component:
-
-{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/blocks/text/cms-button/component/index.js" %}
-```javascript
-import template from './sw-cms-block-button.html.twig';
-
-const { Component } = Shopware;
-
-Component.register('sw-cms-button', {
-    template
-});
-```
-{% endcode %}
-
-
-### Block preview
-
-We'll keep the preview also very simple in this guide like this:
-
-{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/blocks/text/cms-button/preview/sw-cms-preview-button.html.twig" %}
-{% raw %}
-```text
-{% block sw_cms_block_ninja_button_preview %}
-	<div class="ninja-button-flex-center">
-		<button class="sw-cms-preview-ninja-button">Button</button>
-	</div>
-{% endblock %}
-```
-{% endraw %}
-{% endcode %}
-
-Let's register this component as well like this:
-{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/blocks/text/cms-button/preview/index.js" %}
-{% raw %}
-```text
-import template from './sw-cms-preview-button.html.twig';
-import './sw-cms-preview-button.scss';
-
-const { Component } = Shopware;
-
-Component.register('sw-cms-preview-button', {
-    template
-});
-```
-{% endraw %}
-{% endcode %}
-
-And let's add a bit of CSS code (not neccessary)
-
-{% code title="<plugin root>/src/Resources/app/administration/src/module/sw-cms/blocks/text/cms-button/preview/sw-cms-preview-button.scss" %}
-```css
-.ninja-button-flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    .sw-cms-preview-ninja-button {
-        background-color: #4492ed;
-        border: none;
-        color: white;
-        padding: 16px 60px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-    }
-
-}
-```
-{% endcode %}
-
-### Build administration
-
-You need to build your administration before you can see anything in the shopware backend. Just run the one of the following commands:
+Your element in the administration is almost ready. The only thing you need to do now is to build the administration again!
 
 {% tabs %}
 {% tab title="Development template" %}
@@ -174,108 +420,48 @@ You need to build your administration before you can see anything in the shopwar
 {% endtab %}
 {% endtabs %}
 
-Note: Your plugin has to be installed and activated. If you still can't see the block make sure to clear your cache as well.
+### The storefront view
 
-## What about the slots?
-
-If you did everything correct so far, you should see the CMS-Block in your "Shopping Experiences" module in the category text. You also should be able
-to drag and drop the block into your CMS-Page but you will not see a button there. Instead you will see the exact same "Lorem Ipsum" text like you do
-when you drag and drop a normal text block into your page. Why?
-
-Because of the slot we defined. In our `<plugin root>/src/Resources/app/administration/src/module/sw-cms/blocks/text/cms-button/index.js`. We gave the slot
-the element "text". You can throw in every other element here as well. Since we haven't created a element for the button it's one of our To-Do's now.
-
-We also need a config and we need to react on the settings which are made in the administration to display everything correct in the frontend. First of all
-we need to create a simple frontend view first. So let's start with that!
-
-## Frontend implemantation
-
-Creating a frontend view is very simple as you should know from the [Add CMS block](../add-cms-block.md) guide. We only need to create a twig file in the 
-correct directory with the same name. It should look like this:
-
+First let's adjust the code for our block from our last guide.
 
 {% code title="<plugin root>/src/Resources/views/storefront/block/cms-block-cms-button.html.twig" %}
 {% raw %}
 ```text
-{% block block_cms_button_example %}
-    <div class="cms-element ninja-cms-button-flex ninja-cms-button-flex-center">
-		{% block element_text_button %}
-			<a href="#">
-				<button class="ninja-cms-btn">
-                    Button
-                </button>
-			</a>
+{% block block_cms_button_block %}
+	{% set element = block.slots.getSlot('button') %}
+	{% set columns = 1 %}
+
+	<div class="col-12" data-cms-element-id="{{ element.id }}">
+		{% block block_text_inner %}
+			{% sw_include "@Storefront/storefront/element/cms-element-" ~ element.type ~ ".html.twig" ignore missing %}
 		{% endblock %}
-    </div>
+	</div>
 {% endblock %}
 ```
 {% endraw %}
 {% endcode %}
 
-Mayb you remember the storefront implementation from the [Add CMS block](../add-cms-block.md) guide. In that guide we were just extending from
-a different file like this:
+Now we want to react to the configuration we gave the element in the backend so we need to create a new file `cms-element-cms-button.html.twig`
 
-{% code title="<plugin root>/src/Resources/views/storefront/block/cms-block-image-text-reversed.html.twig" %}
+{% code title="<plugin root>/src/Resources/views/storefront/element/cms-element-cms-button.html.twig" %}
 {% raw %}
 ```text
-{% sw_extends '@Storefront/storefront/block/cms-block-image-text.html.twig' %}
+{% block element_text %}
+	{%  set config = element.fieldConfig.elements %}
+
+	<div class="cms-element-{{ element.type }} ninja-cms-button-flex ninja-cms-button-flex{% if config.buttonAlign.value == "center" %}-center{% elseif config.buttonAlign.value == "flex-end" %}-end{% else %}-start{% endif %}">
+		{% block element_text_button %}
+			<a href="{{config.url.value}}" {% if config.newTab.value %} target="_blank" {% endif %}>
+				<button class="ninja-cms-btn" style="color: {{ config.textColor.value }}; background-color: {{ config.buttonColor.value }}; {% if config.buttonWidth.value != 0 %}width: {{config.buttonWidth.value}}px;{% else %}width: auto{% endif %}">
+                    {{ config.title.value }}
+                </button>
+			</a>
+		{% endblock %}
+	</div>
+{% endblock %}
 ```
 {% endraw %}
 {% endcode %}
 
-It would be possible to override the code from the [original 'image\_text' file](https://github.com/shopware/platform/blob/v6.3.4.1/src/Storefront/Resources/views/storefront/block/cms-block-image-text.html.twig) file here. We just extend so the code in that file exactly matches 
-the code from the original file.
-
-Now we already should see a button in the storefront if we save a page with our new created CMS-Block.
-However the view in the administration and in the storefront are completely different. We could simply but our code in the storefront twig file
-and display whatever we want. To really create a button with a config we need to create a matching CMS-Element.
-
-Before we do that we quickly add a bit CSS to our storefront like this:
-
-{% code title="<plugin root>/src/Resources/app/storefront/src/scss/cms-block-button/_ninja-cms-button.scss" %}
-```css
-.ninja-cms-btn {
-    padding: 1rem;
-
-    &:hover {
-        filter: brightness(110%);
-    }
-}
-
-.ninja-cms-button-flex {
-    display: flex;
-    margin: auto;
-
-    &-start {
-        justify-content: flex-start;
-    }
-
-    &-center {
-        justify-content: center;
-    }
-
-    &-end {
-        justify-content: flex-end;
-    }
-
-    a {
-        button {
-            background-color: #4492ed;
-            border: none;
-            color: #fff;
-            padding: 14px 50px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 30px 0;
-        }
-    }
-}
-```
-{% endcode %}
-
-As you already may see from the CSS code we want to configure how the button is placed and a bit more. To learn how you can to that please head over
-to <!-- INSERT CMS-Element Guide here -->
-
-You also can see the code for this guide here [shopware-real-world-cms-block](https://github.com/NinjaArmy/shopware-real-world-cms) 
+And that's it! Now we created our very first own real world CMS-Element.
+You also can see the code for this guide here [shopware-real-world-cms-block](https://github.com/NinjaArmy/shopware-real-world-cms/tree/02-add-real-world-cms-element) 
