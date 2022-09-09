@@ -1,5 +1,5 @@
 # Shopware real world CMS Guide
-
+A more complete guide with images can be found on my [blog post](https://ninja-army.hashnode.dev/how-to-create-a-cms-element-in-shopware-6)
 ## Overview
 
 This repository exist to help you understand how CMS-Blocks and CMS-Elements work in the administration and in the backend. It's a full step by step guide on how
