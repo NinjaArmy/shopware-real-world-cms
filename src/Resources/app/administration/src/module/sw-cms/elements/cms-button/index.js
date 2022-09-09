@@ -9,6 +9,8 @@ Shopware.Service('cmsService').registerCmsElement({
     component: 'sw-cms-el-cms-button',
     configComponent: 'sw-cms-el-config-cms-button',
     previewComponent: 'sw-cms-el-preview-cms-button',
+    removable: false, // disable switching in block
+    hidden: true, // hide element in switch modal
     defaultConfig: {
         title: {
             source: 'static',
