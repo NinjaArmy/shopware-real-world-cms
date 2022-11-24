@@ -4,7 +4,7 @@ import './preview';
 Shopware.Service('cmsService').registerCmsBlock({
     name: 'cms-button',
     label: 'sw-cms.blocks.text.ninja-cms-button.label',
-    category: 'text',
+    category: 'ninja', /* Add your category here */
     component: 'sw-cms-block-button',
     previewComponent: 'sw-cms-preview-button',
     defaultConfig: {
