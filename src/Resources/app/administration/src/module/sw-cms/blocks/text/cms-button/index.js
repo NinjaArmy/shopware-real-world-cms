@@ -2,7 +2,7 @@ import './component';
 import './preview';
 
 Shopware.Service('cmsService').registerCmsBlock({
-    name: 'cms-button',
+    name: 'button',
     label: 'sw-cms.blocks.text.ninja-cms-button.label',
     category: 'text',
     component: 'sw-cms-block-button',
